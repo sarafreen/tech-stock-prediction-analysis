@@ -54,43 +54,50 @@ plt.plot(data['Date'], data['20_day_MA'], label='20-Day MA')
 plt.title('Apple Stock Closing Prices with 20-Day Moving Average')
 plt.legend()
 plt.show()
-30 questions
+
+### 30 questions ###
 1. What is the total number of trading days in the dataset?
 total_days = data['Date'].nunique()
 print(f"Total number of trading days: {total_days}")
-2.What is the average closing price for the entire dataset?
+
+2. What is the average closing price for the entire dataset?
 avg_close = data['Close'].mean()
 print(f"Average closing price: {avg_close}")
-3.max_close_date = data.loc[data['Close'].idxmax(), ['Date', 'Close']]
+
+3. max_close_date = data.loc[data['Close'].idxmax(), ['Date', 'Close']]
 print(f"Highest closing price: {max_close_date['Close']} on {max_close_date['Date']}")
-4.What is the lowest closing price, and on which date did it occur?
+
+4. What is the lowest closing price, and on which date did it occur?
 min_close_date = data.loc[data['Close'].idxmin(), ['Date', 'Close']]
 print(f"Lowest closing price: {min_close_date['Close']} on {min_close_date['Date']}")
-5.What is the total trading volume over the entire dataset?
+
+5. What is the total trading volume over the entire dataset?
 total_volume = data['Volume'].sum()
 print(f"Total trading volume: {total_volume}")
-6.How does the closing price change over time? (Line plot)
+
+6. How does the closing price change over time? (Line plot)
 plt.plot(data['Date'], data['Close'])
 plt.title('Closing Price Over Time')
 plt.xlabel('Date')
 plt.ylabel('Close Price')
 plt.show()
-7.What is the monthly average closing price? (Bar plot)
+
+7. What is the monthly average closing price? (Bar plot)
 data['Month'] = data['Date'].dt.to_period('M')
 monthly_avg_close = data.groupby('Month')['Close'].mean()
-
 monthly_avg_close.plot(kind='bar', title='Monthly Average Closing Price')
 plt.xlabel('Month')
 plt.ylabel('Average Close Price')
 plt.show()
-8.What is the monthly total trading volume? (Bar plot)
-monthly_volume = data.groupby('Month')['Volume'].sum()
 
+8. What is the monthly total trading volume? (Bar plot)
+monthly_volume = data.groupby('Month')['Volume'].sum()
 monthly_volume.plot(kind='bar', title='Monthly Trading Volume')
 plt.xlabel('Month')
 plt.ylabel('Total Volume')
 plt.show()
-9.What is the 30-day moving average of the closing price? (Line plot)
+
+9. What is the 30-day moving average of the closing price? (Line plot)
 data['30_day_MA'] = data['Close'].rolling(window=30).mean()
 plt.plot(data['Date'], data['Close'], label='Close Price')
 plt.plot(data['Date'], data['30_day_MA'], label='30-Day Moving Average')
@@ -99,14 +106,16 @@ plt.xlabel('Date')
 plt.ylabel('Price')
 plt.legend()
 plt.show()
-10.What is the daily change in closing price? (Histogram)
+
+10. What is the daily change in closing price? (Histogram)
 data['Daily_Change'] = data['Close'].diff()
 data['Daily_Change'].hist(bins=50)
 plt.title('Histogram of Daily Closing Price Changes')
 plt.xlabel('Daily Change')
 plt.ylabel('Frequency')
 plt.show()
-11.How does the opening price compare with the closing price over time? (Line plot with multiple lines)
+
+11. How does the opening price compare with the closing price over time? (Line plot with multiple lines)
 plt.plot(data['Date'], data['Open'], label='Opening Price')
 plt.plot(data['Date'], data['Close'], label='Closing Price')
 plt.title('Opening vs. Closing Price Over Time')
@@ -114,106 +123,123 @@ plt.xlabel('Date')
 plt.ylabel('Price')
 plt.legend()
 plt.show()
-12.What are the daily highs and lows for each month? (Box plot)
+
+12. What are the daily highs and lows for each month? (Box plot)
 data['Month'] = data['Date'].dt.to_period('M')
 data.boxplot(column=['High', 'Low'], by='Month')
 plt.title('Daily Highs and Lows for Each Month')
 plt.xlabel('Month')
 plt.ylabel('Price')
 plt.show()
-13.How do the opening and closing prices vary across different months? (Bar plot)
+
+13. How do the opening and closing prices vary across different months? (Bar plot)
 monthly_avg_open_close = data.groupby('Month')[['Open', 'Close']].mean()
 monthly_avg_open_close.plot(kind='bar')
 plt.title('Average Opening and Closing Prices per Month')
 plt.xlabel('Month')
 plt.ylabel('Price')
 plt.show()
-14.What is the average daily trading volume for each day of the week? (Bar plot)
+
+14. What is the average daily trading volume for each day of the week? (Bar plot)
 data['Day_of_Week'] = data['Date'].dt.day_name()
 avg_volume_per_day = data.groupby('Day_of_Week')['Volume'].mean()
 avg_volume_per_day.plot(kind='bar', title='Average Daily Trading Volume per Day of the Week')
 plt.xlabel('Day of the Week')
 plt.ylabel('Average Volume')
 plt.show()
-15.Does the stock typically close higher than it opens? (Pie chart)
+
+15. Does the stock typically close higher than it opens? (Pie chart)
 closes_higher = (data['Close'] > data['Open']).sum()
 closes_lower = (data['Close'] <= data['Open']).sum()
 plt.pie([closes_higher, closes_lower], labels=['Closes Higher', 'Closes Lower'], autopct='%1.1f%%')
 plt.title('Proportion of Days Stock Closes Higher vs. Lower')
 plt.show()
-16.What is the correlation between daily trading volume and closing price?
+
+16. What is the correlation between daily trading volume and closing price?
 correlation_volume_close = data['Volume'].corr(data['Close'])
 print(f"Correlation between Volume and Closing Price: {correlation_volume_close}")
-17.How does the closing price relate to the opening price? (Scatter plot)
+
+17. How does the closing price relate to the opening price? (Scatter plot)
 plt.scatter(data['Open'], data['Close'])
 plt.title('Closing Price vs. Opening Price')
 plt.xlabel('Opening Price')
 plt.ylabel('Closing Price')
 plt.show()
-18.What is the distribution of trading volumes? (Histogram)
+
+18. What is the distribution of trading volumes? (Histogram)
 data['Volume'].hist(bins=50)
 plt.title('Distribution of Trading Volumes')
 plt.xlabel('Volume')
 plt.ylabel('Frequency')
 plt.show()
-19.What is the daily percentage change in stock prices? (Line plot)
+
+19. What is the daily percentage change in stock prices? (Line plot)
 data['Daily_Percentage_Change'] = data['Close'].pct_change() * 100
 plt.plot(data['Date'], data['Daily_Percentage_Change'])
 plt.title('Daily Percentage Change in Stock Prices')
 plt.xlabel('Date')
 plt.ylabel('Percentage Change')
 plt.show()
-20.What are the highest and lowest percentage changes observed?
+
+20. What are the highest and lowest percentage changes observed?
 max_change = data['Daily_Percentage_Change'].max()
 min_change = data['Daily_Percentage_Change'].min()
 print(f"Highest daily percentage change: {max_change}%")
 print(f"Lowest daily percentage change: {min_change}%")
-21.Is there any seasonal trend in the closing prices? (Box plot by month)
+
+21. Is there any seasonal trend in the closing prices? (Box plot by month)
 data['Month'] = data['Date'].dt.month
 data.boxplot(column='Close', by='Month')
 plt.title('Seasonal Trend in Closing Prices')
 plt.xlabel('Month')
 plt.ylabel('Closing Price')
 plt.show()
-22.monthly_avg_high_low = data.groupby('Month')[['High', 'Low']].mean()
+
+22. monthly_avg_high_low = data.groupby('Month')[['High', 'Low']].mean()
 monthly_avg_high_low.plot()
 plt.title('Average Monthly Highs and Lows')
 plt.xlabel('Month')
 plt.ylabel('Price')
 plt.show()
-23.Does trading volume increase on specific days of the week? (Bar plot)
+
+23. Does trading volume increase on specific days of the week? (Bar plot)
 day_volume_avg = data.groupby('Day_of_Week')['Volume'].mean().sort_values()
 day_volume_avg.plot(kind='bar')
 plt.title('Average Volume by Day of the Week')
 plt.xlabel('Day of the Week')
 plt.ylabel('Average Volume')
 plt.show()
-24.How volatile is the stock price over time? (Line plot of rolling standard deviation)
+
+24. How volatile is the stock price over time? (Line plot of rolling standard deviation)
 data['Rolling_Std'] = data['Close'].rolling(window=20).std()
 plt.plot(data['Date'], data['Rolling_Std'])
 plt.title('Stock Price Volatility Over Time')
 plt.xlabel('Date')
 plt.ylabel('Rolling Standard Deviation')
 plt.show()
-25.How many days did the stock price increase consecutively?
+
+25. How many days did the stock price increase consecutively?
 data['Price_Up'] = data['Close'].diff() > 0
 longest_streak = data['Price_Up'].groupby((data['Price_Up'] != data['Price_Up'].shift()).cumsum()).cumsum().max()
 print(f"Longest consecutive increase streak: {longest_streak} days")
-26.Is there a correlation between trading volume and daily price change?
+
+26. Is there a correlation between trading volume and daily price change?
 correlation_volume_change = data['Volume'].corr(data['Daily_Change'])
 print(f"Correlation between Volume and Daily Change: {correlation_volume_change}")
-27.What is the average volume on dividend distribution days?
+
+27. What is the average volume on dividend distribution days?
 dividend_days = data[data['Adj Close'] != data['Close']]
 avg_dividend_volume = dividend_days['Volume'].mean()
 print(f"Average volume on dividend days: {avg_dividend_volume}")
-28.Does a higher trading volume indicate a larger change in stock price? (Scatter plot)
+
+28. Does a higher trading volume indicate a larger change in stock price? (Scatter plot)
 plt.scatter(data['Volume'], data['Daily_Change'].abs())
 plt.title('Trading Volume vs. Absolute Daily Change')
 plt.xlabel('Volume')
 plt.ylabel('Absolute Daily Change')
 plt.show()
-29.What are the typical trading patterns before and after dividend payments? (Line plot around dividend days)
 
+29. What are the typical trading patterns before and after dividend payments? (Line plot around dividend days)\
 data['Dividend'] = data['Adj Close'] != data['Close']
 plt.plot(data['Date'], data['Close'], label='Close Price')
 plt.plot(data['Date'][data['Dividend']], data['Close'][data['Dividend']], 'ro', label='Dividend Days')
@@ -222,7 +248,8 @@ plt.xlabel('Date')
 plt.ylabel('Close Price')
 plt.legend()
 plt.show()
-30.How does the market react to sudden spikes in trading volume? (Scatter plot)
+
+30. How does the market react to sudden spikes in trading volume? (Scatter plot)
 data['Volume_Spike'] = data['Volume'] > data['Volume'].rolling(window=20).mean() * 1.5
 plt.scatter(data['Date'], data['Close'], c=data['Volume_Spike'], cmap='coolwarm', label='Volume Spike')
 plt.title('Market Reaction to Volume Spikes')

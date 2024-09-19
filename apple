@@ -1,0 +1,36 @@
+1.What is the trend of Apple’s closing stock price over time?import matplotlib.pyplot as plt
+
+# Plot closing prices over time
+plt.plot(data['Date'], data['Close'])
+plt.title('Apple Stock Closing Prices Over Time')
+plt.xlabel('Date')
+plt.ylabel('Closing Price')
+plt.show()
+2.What is the highest and lowest stock price in the given timeframe?
+highest_price = data['High'].max()
+lowest_price = data['Low'].min()
+print(f"Highest Price: {highest_price}")
+print(f"Lowest Price: {lowest_price}")
+3.How does the trading volume vary over the months?
+# Extract month from date
+data['Month'] = data['Date'].dt.to_period('M')
+monthly_volume = data.groupby('Month')['Volume'].sum()
+
+# Plot monthly trading volume
+monthly_volume.plot(kind='bar', title='Monthly Trading Volume')
+plt.xlabel('Month')
+plt.ylabel('Volume')
+plt.show()
+4.Correlation Analysis: How correlated are the opening, closing, high, and low prices?
+correlation = data[['Open', 'High', 'Low', 'Close']].corr()
+print(correlation)
+5.Moving Average: how to do you plot a 20-day moving average of the closing prices.
+# Calculate moving average
+data['20_day_MA'] = data['Close'].rolling(window=20).mean()
+
+# Plot moving average
+plt.plot(data['Date'], data['Close'], label='Close')
+plt.plot(data['Date'], data['20_day_MA'], label='20-Day MA')
+plt.title('Apple Stock Closing Prices with 20-Day Moving Average')
+plt.legend()
+plt.show()

@@ -1,32 +1,52 @@
-1.What is the trend of Apple’s closing stock price over time?import matplotlib.pyplot as plt
 
-# Plot closing prices over time
-plt.plot(data['Date'], data['Close'])
-plt.title('Apple Stock Closing Prices Over Time')
-plt.xlabel('Date')
-plt.ylabel('Closing Price')
-plt.show()
-2.What is the highest and lowest stock price in the given timeframe?
-highest_price = data['High'].max()
-lowest_price = data['Low'].min()
-print(f"Highest Price: {highest_price}")
-print(f"Lowest Price: {lowest_price}")
-3.How does the trading volume vary over the months?
-# Extract month from date
-data['Month'] = data['Date'].dt.to_period('M')
-monthly_volume = data.groupby('Month')['Volume'].sum()
+Instances of Unclean Data
+Date Column:
 
-# Plot monthly trading volume
-monthly_volume.plot(kind='bar', title='Monthly Trading Volume')
-plt.xlabel('Month')
-plt.ylabel('Volume')
-plt.show()
-4.Correlation Analysis: How correlated are the opening, closing, high, and low prices?
-correlation = data[['Open', 'High', 'Low', 'Close']].corr()
-print(correlation)
-5.Moving Average: how to do you plot a 20-day moving average of the closing prices.
-# Calculate moving average
-data['20_day_MA'] = data['Close'].rolling(window=20).mean()
+The dates might be in a string format. We need to convert this column to a datetime object for proper time series analysis.
+Numerical Columns (Open, High, Low, Close, Adj Close, Volume):
+
+These columns might contain commas (,) which could prevent proper numeric operations. We need to remove commas and convert these columns to numeric types.
+Check for any missing values (NaN) that might interfere with calculations.
+Volume Column:
+
+The values in this column may include commas and need to be converted into integers for correct analysis.
+Check for duplicates:
+
+Ensure there are no duplicate rows in the dataset which could affect the accuracy of the analysis.
+Handling Dividend Rows:
+
+There are rows in the dataset that mention dividends (e.g., "0.25 Dividend"). These rows need to be identified and removed as they do not contain the necessary stock price information.
+import pandas as pd
+clean dataset
+# Load the dataset (replace 'apple_stock_data.csv' with your dataset's filename)
+data = pd.read_csv('apple_stock_data.csv')
+
+# 1. Clean the 'Date' column: Convert to datetime
+data['Date'] = pd.to_datetime(data['Date'], errors='coerce')
+
+# 2. Remove commas and convert numeric columns to float
+numeric_columns = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']
+for col in numeric_columns:
+    # Remove commas and convert to numeric
+    data[col] = pd.to_numeric(data[col].astype(str).str.replace(',', ''), errors='coerce')
+
+# 3. Handle missing values: Remove rows with NaNs (if any)
+data.dropna(inplace=True)
+
+# 4. Remove dividend rows (which have NaN in numeric columns after conversion)
+data = data.dropna(subset=['Open', 'High', 'Low', 'Close'])
+
+# 5. Remove duplicate rows (if any)
+data.drop_duplicates(inplace=True)
+
+# 6. Convert 'Volume' to integer (after removing commas and converting to numeric type)
+data['Volume'] = data['Volume'].astype(int)
+
+# Display cleaned dataset
+print(data.head())
+
+# Save the cleaned dataset to a new CSV file
+data.to_csv('cleaned_apple_stock_data.csv', index=False)
 
 # Plot moving average
 plt.plot(data['Date'], data['Close'], label='Close')
